@@ -68,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: ikaw nalay add og validation if naa ba siyay gi input nga email or phone num
                 String check1 = "";
                 String check2 = " ";
                 String checkAlphaNumeric = "[a-zA-Z0-9]+";
