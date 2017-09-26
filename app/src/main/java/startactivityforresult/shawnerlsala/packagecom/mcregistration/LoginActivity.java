@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Get String Extra which is customer code
+        //Get String Extra which is customer/consumer code
         if (getIntent().getStringExtra("customerCode") != null) {
             customerCode = getIntent().getStringExtra("customerCode");
         }
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
         inputEmail = (EditText) findViewById(R.id.email);
         inputPhone = (EditText) findViewById(R.id.phoneNumTxt);
-        inputTelPhone = findViewById(R.id.telephoneNumTxt);
+        inputTelPhone = (EditText) findViewById(R.id.telephoneNumTxt);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnLogin = (Button) findViewById(R.id.btn_login);
@@ -74,7 +74,9 @@ public class LoginActivity extends AppCompatActivity {
                 if(!inputEmail.getText().toString().matches(check1)
                         || !inputEmail.getText().toString().matches(check2)
                         && inputPhone.getText().toString().matches(checkAlphaNumeric)){
-                    //if sakto
+                    if(!inputPhone.getText().toString().matches(check1)
+                        || !inputPhone.getText().toString().matches(check2))
+                    //if check
                     databaseReference.child(customerCode).child("email").setValue(inputEmail.getText().toString());
                     databaseReference.child(customerCode).child("phoneNum").setValue(inputPhone.getText().toString());
                     databaseReference.child(customerCode).child("telephoneNum").setValue(inputTelPhone.getText().toString());
