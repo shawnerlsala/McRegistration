@@ -20,6 +20,8 @@ public class First extends AppCompatActivity {
     private EditText consumerCodeTxt;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private ValueEventListener valueEventListener;
+    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +44,36 @@ public class First extends AppCompatActivity {
                      @Override
                      public void onDataChange(DataSnapshot dataSnapshot) {
                          if (dataSnapshot.exists()){
-                             Toast.makeText(First.this, "Consumer code already exists!", Toast.LENGTH_SHORT).show();
-                         }else{
 
-                                 Intent intent = new Intent(First.this, LoginActivity.class);
-                                 intent.putExtra("customerCode", consumerCodeTxt.getText().toString());
-                                 startActivity(intent);
+                             final Query newQueryRef = firebaseDatabase.getReference("customers").child(consumerCodeTxt.getText().toString());
+                             valueEventListener = new ValueEventListener() {
+                                 @Override
+                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                     if(dataSnapshot.exists()){
+                                         Intent intent = new Intent(First.this, ResultActivity.class);
+                                         intent.putExtra("customerCode", consumerCodeTxt.getText().toString());
+                                         startActivity(intent);
+                                         newQueryRef.removeEventListener(valueEventListener);
+                                     }else{
+                                         Intent intent = new Intent(First.this, LoginActivity.class);
+                                         intent.putExtra("customerCode", consumerCodeTxt.getText().toString());
+                                         startActivity(intent);
+                                         newQueryRef.removeEventListener(valueEventListener);
+                                     }
+                                 }
+
+                                 @Override
+                                 public void onCancelled(DatabaseError databaseError) {
+
+                                 }
+                             };
+                             newQueryRef.addValueEventListener(valueEventListener);
+                             finish();
+                         }else{
+                                i++;
+                             Toast.makeText(First.this, "Consumer code does not exists! Not Allowed to Register", Toast.LENGTH_SHORT).show();
+                         //    finish();
+
 
                          }
                      }
